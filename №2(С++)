@@ -1,0 +1,115 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+// Define the equation
+double f(double x) {
+    return 2 / (1 + x) - 3 * sin(x);
+}
+
+// Define the derivative of the equation
+double df(double x) {
+    return -2 / pow(1 + x, 2) - 3 * cos(x);
+}
+
+// Define the bisection method
+double bisection_method(double a, double b, double tolerance = 1e-6, int max_iter = 1000) {
+    int iter = 0;
+    while (iter < max_iter) {
+        double c = (a + b) / 2;
+        if (abs(f(c)) < tolerance) {
+            return c;
+        }
+        if (f(c) * f(a) < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
+        iter++;
+    }
+    return 0;
+}
+
+// Define the iteration method
+double iteration_method(double x0, double tolerance = 1e-6, int max_iter = 1000) {
+    double x = x0;
+    int iter = 0;
+    while (iter < max_iter) {
+        double x_old = x;
+        x = x - f(x) / df(x);
+        if (abs(x - x_old) < tolerance) {
+            return x;
+        }
+        iter++;
+    }
+    return 0;
+}
+
+// Define the chord method
+double chord_method(double a, double b, double tolerance = 1e-6, int max_iter = 1000) {
+    int iter = 0;
+    while (iter < max_iter) {
+        double c = (a * f(b) - b * f(a)) / (f(b) - f(a));
+        if (abs(f(c)) < tolerance) {
+            return c;
+        }
+        if (f(c) * f(a) < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
+        iter++;
+    }
+    return 0;
+}
+
+// Define the Newton-Raphson method
+double newton_raphson_method(double x0, double tolerance = 1e-6, int max_iter = 1000) {
+    double x = x0;
+    int iter = 0;
+    while (iter < max_iter) {
+        double x_old = x;
+        x = x - f(x) / df(x);
+        if (abs(x - x_old) < tolerance) {
+            return x;
+        }
+        iter++;
+    }
+    return 0;
+}
+
+int main() {
+    // Set the initial guesses for the bisection method
+    double a = 0;
+    double b = 1;
+
+    // Set the initial guess for the iteration, chord, and Newton-Raphson methods
+    double x0 = 0.5;
+
+    // Set the tolerance
+    double tolerance = 1e-6;
+
+    // Set the maximum number of iterations
+    int max_iter = 1000;
+
+    // Solve the equation using the bisection method
+    double root_bisection = bisection_method(a, b, tolerance, max_iter);
+
+    // Solve the equation using the iteration method
+    double root_iteration = iteration_method(x0, tolerance, max_iter);
+
+    // Solve the equation using the chord method
+    double root_chord = chord_method(a, b, tolerance, max_iter);
+
+    // Solve the equation using the Newton-Raphson method
+    double root_newton_raphson = newton_raphson_method(x0, tolerance, max_iter);
+
+    // Print the roots
+    cout << "Bisection Method Root: " << root_bisection << endl;
+    cout << "Iteration Method Root: " << root_iteration << endl;
+    cout << "Chord Method Root: " << root_chord << endl;
+    cout << "Newton-Raphson Method Root: " << root_newton_raphson << endl;
+
+    return 0;
+}
